@@ -12,41 +12,30 @@ class VehiculoConductor:
         self.fechaHoraRegistro = fechaHoraRegistro
         self.observacion = observacion
         
+
     def listado(self):
         con = db().open
 
         cursor = con.cursor()
 
-        sql = """
-            SELECT * 
-            FROM vehiculo_conductor 
-            WHERE solicitud_servicioid = %s 
-            """
+        sql = ""
         
-        cursor.execute(sql, [idSolicitud])
-
-        datos = cursor.fetchall()
-
-        cursor.close()
-        con.close()
-
-        if datos:
-            return json.dumps({'status': True, 'data': datos, 'message': 'Listado de ubicaciones de los vehiculos'})
+        if self.solicitud_servicio_id == 0:
+            sql = """
+            SELECT vc.*, v.matricula, c.apellidos || ', ' || c.nombres as conductor
+            FROM vehiculo_conductor vc
+                INNER JOIN vehiculo v on v.id = vc.vehiculoid
+                INNER JOIN conductor c on c.id = vc.conductorid
+            WHERE UPPER(nombreEstado) != 'FINALIZADO' 
+            """
         else:
-            return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})
-
-    def listadoPorSolicitud(self, idSolicitud):
-        con = db().open
-
-        cursor = con.cursor()
-
-        sql = """
+            sql = """
             SELECT * 
             FROM vehiculo_conductor 
             WHERE solicitud_servicioid = %s 
             """
         
-        cursor.execute(sql, [idSolicitud])
+        cursor.execute(sql, [self.solicitud_servicio_id, self.solicitud_servicio_id])
 
         datos = cursor.fetchall()
 
@@ -102,3 +91,43 @@ class VehiculoConductor:
             cursor.close()
             con.close()  
 
+
+    def actualizarEstado(self):
+        #Abrimos conexion a la bd
+        con = db().open
+    
+        #Configurar para que los cambios de escritura en la BD se confirmen de manera manual
+        con.autocommit = False
+
+        #Crear un cursor
+        cursor = con.cursor()
+
+        try:
+            #Consulta  
+            sql = """
+                update vehiculo_conductor set 
+                    latitud = %s, 
+                    longitud = %s, 
+                    nombreEstado = %s, 
+                    fechaHoraRegistro = now(), 
+                    observacion = %s
+
+                where solicitud_servicioid = %s, vehiculoid = %s, conductorid = %s
+                """
+            #ejecutar la sentencia sql
+            cursor.execute(sql, [self.latitud, self.longitud, self.nombreEstado, self.observacion, self.solicitud_servicio_id, self.vehiculo_id, self.conductor_id])
+
+            #Confirmar la sentencia de ejecución
+            con.commit()
+
+            #retornar un mensaje
+            return json.dumps({'status': True, 'data': None, 'message': 'La actualización se ha registrado correctamente'})
+
+        except con.Error as error:
+            #Revocar la operación
+            con.rollback()
+            return json.dumps({'status': False, 'data': None, 'message': format(error)})
+
+        finally:
+            cursor.close()
+            con.close()  
