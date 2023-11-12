@@ -9,3 +9,28 @@ class EstadoSolicitud:
         self.observacion = observacion
         self.estado = estado
         self.solicitud_servicio_id = solicitud_servicio_id
+
+
+    def listadoEstados(self, idSolicitud):
+        con = db().open
+
+        cursor = con.cursor()
+
+        sql = """
+            SELECT * 
+            FROM estado_solicitud 
+            WHERE solicitud_servicioid = %s 
+            ORDER BY fechahoraregistro
+            """
+        
+        cursor.execute(sql, [idSolicitud])
+
+        datos = cursor.fetchall()
+
+        cursor.close()
+        con.close()
+
+        if datos:
+            return json.dumps({'status': True, 'data': datos, 'message': 'Historial de estados del servicio'})
+        else:
+            return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})
