@@ -7,12 +7,12 @@ ws_cliente = Blueprint("ws_cliente", __name__)
 
 @ws_cliente.route('/cliente', methods = ["GET"])
 #@vt.validar
-def listarUbicacion():
+def listar():
 
     if request.method == 'GET':
         obj = Cliente()
     
-        resultadoJSON = obj.listado()
+        resultadoJSON = obj.listadoClientes()
 
         resultado = json.loads(resultadoJSON)
 

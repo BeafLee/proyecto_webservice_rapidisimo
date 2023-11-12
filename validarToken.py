@@ -3,7 +3,7 @@ from flask import jsonify, request
 from functools import wraps
 from config import SecretKey
 import jwt
-from models.sesion import Sesion
+#from models.sesion import Sesion
 import json
 
 def validar(fx): ## Funcion de envoltura 

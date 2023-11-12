@@ -10,12 +10,12 @@ ws_vehiculoConductor = Blueprint("ws_vehiculoConductor", __name__)
 def listarUbicacion():
 
     if request.method == 'POST':
-        if 'idSolicitud' not in request.form:
+        if 'solicitud_id' not in request.form:
             return jsonify({'status': False, 'data': None, 'message': 'Falta parámetros'}), 400
 
-        idSolicitud = request.form['solicitud_id']
+        solicitud_id = request.form['solicitud_id']
 
-        obj = VehiculoConductor(solicitud_servicio_id = idSolicitud)
+        obj = VehiculoConductor(solicitud_servicio_id = solicitud_id)
     
         resultadoJSON = obj.listado()
 

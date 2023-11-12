@@ -11,7 +11,7 @@ class EstadoSolicitud:
         self.solicitud_servicio_id = solicitud_servicio_id
 
 
-    def listadoEstados(self, idSolicitud):
+    def listadoEstados(self):
         con = db().open
 
         cursor = con.cursor()
@@ -23,7 +23,7 @@ class EstadoSolicitud:
             ORDER BY fechahoraregistro
             """
         
-        cursor.execute(sql, [idSolicitud])
+        cursor.execute(sql, [self.solicitud_servicio_id])
 
         datos = cursor.fetchall()
 

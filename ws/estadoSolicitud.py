@@ -5,17 +5,19 @@ import validarToken as vt
 
 ws_estadoSolicitud = Blueprint("ws_estadoSolicitud", __name__)
 
-@ws_estadoSolicitud.route('/solicitud/<int:idSolicitud>/estados', methods = ["GET"])
+@ws_estadoSolicitud.route('/solicitud/estados', methods = ["POST"])
 #@vt.validar
-def registrarPago(idSolicitud):
+def registrarPago():
 
-    if request.method == 'GET':
-        if not idSolicitud:
+    if request.method == 'POST':
+        if 'solicitud_id' not in request.form:
             return jsonify({'status': False, 'data': None, 'message': 'Falta parámetros'}), 400
 
-        obj = EstadoSolicitud()
+        idSolicitud = request.form['solicitud_id']
+
+        obj = EstadoSolicitud(solicitud_servicio_id=idSolicitud)
     
-        resultadoJSON = obj.listadoEstados(idSolicitud)
+        resultadoJSON = obj.listadoEstados()
 
         resultado = json.loads(resultadoJSON)
 
