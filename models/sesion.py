@@ -8,7 +8,7 @@ class Sesion():
     def iniciarSesion(self):
         con=db().open 
         cursor=con.cursor()
-        sql="""SELECT id,tipoUsuario FROM usuario WHERE usuario=%s AND contrasena=%s"""
+        sql="""SELECT id,tipoUsuario FROM USUARIO WHERE usuario=%s AND contrasena=%s"""
         cursor.execute(sql,[self.usuario,self.clave])
         datos=cursor.fetchone()
         cursor.close()
@@ -29,7 +29,7 @@ class Sesion():
         con.autocommit=False
         cursor=con.cursor()
         #Preparar la sentencia para actualizar el token
-        sql="UPDATE usuario set token=%s,estado_token='1' where id=%s"
+        sql="UPDATE USUARIO set token=%s,estadoToken='1' where id=%s"
         try:
             #Ejecutra la sentencia sql
             cursor.execute(sql,[token,usuarioID])
@@ -42,7 +42,7 @@ class Sesion():
     def validarEstadoToken(self,usuarioID):
         con=db().open 
         cursor=con.cursor()
-        sql="select estado_token from usuario where id=%s"
+        sql="select estadoToken from USUARIO where id=%s"
         cursor.execute(sql,[usuarioID])
         datos=cursor.fetchone()
         cursor.close()

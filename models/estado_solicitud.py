@@ -11,7 +11,7 @@ class Estado():
         con = db().open
         cursor = con.cursor()
         #Sentencia para dar de baja la tarifa actual antes de ingresar la tarifa nueva
-        sql_registrar="""insert into estado_solicitud(estado,fechaHoraRegistro,observacion) values(%s,CURRENT_TIMESTAMP,%s)
+        sql_registrar="""insert into ESTADO_SOLICITUD(estado,fechaHoraRegistro,observacion) values(%s,CURRENT_TIMESTAMP,%s)
         """        
         try:
            cursor.execute(sql_registrar,[self.estado,self.observacion])      

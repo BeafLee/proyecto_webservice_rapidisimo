@@ -23,16 +23,16 @@ class VehiculoConductor:
         if self.solicitud_servicio_id == 0:
             sql = """
             SELECT vc.*, v.matricula, c.apellidos || ', ' || c.nombres as conductor
-            FROM vehiculo_conductor vc
-                INNER JOIN vehiculo v on v.id = vc.vehiculoid
-                INNER JOIN conductor c on c.id = vc.conductorid
+            FROM VEHICULO_CONDUCTOR vc
+                INNER JOIN VEHICULO v on v.id = vc.VEHICULOid
+                INNER JOIN CONDUCTOR c on c.id = vc.CONDUCTORid
             WHERE UPPER(nombreEstado) != 'FINALIZADO' 
             """
         else:
             sql = """
             SELECT * 
-            FROM vehiculo_conductor 
-            WHERE solicitud_servicioid = %s 
+            FROM VEHICULO_CONDUCTOR 
+            WHERE SOLICITUD_SERVICIOid = %s 
             """
         
         cursor.execute(sql, [self.solicitud_servicio_id, self.solicitud_servicio_id])
@@ -60,7 +60,7 @@ class VehiculoConductor:
 
         try:
             #Consulta para registrar 
-            sql = "insert into vehiculo_conductor(solicitud_servicioid, vehiculoid, conductorid) values (%s,%s,%s)"
+            sql = "insert into VEHICULO_CONDUCTOR(SOLICITUD_SERVICIOid, VEHICULOid, CONDUCTORid) values (%s,%s,%s)"
             #ejecutar la sentencia sql
             cursor.execute(sql, [self.solicitud_servicio_id, self.vehiculo_id, self.conductor_id])
 
@@ -68,10 +68,10 @@ class VehiculoConductor:
             #Consulta para actualizar el estado de la solicitud si es que no tiene estado ya
             sql = """
                 insert into 
-                    estado_solicitud(nombreEstado, fechaHOraRegistro, observacion, estado, solicitud_servicioid) 
+                    ESTADO_SOLICITUD(nombreEstado, fechaHoraRegistro, observacion, estado, SOLICITUD_SERVICIOid) 
                     values ('VEHICULO ASIGNADO', now(), 'Registro automático', 'V', %s) 
                 where not exists 
-                    (select * from estado_solicitud where solicitud_servicioid = %s)
+                    (select * from ESTADO_SOLICITUD where SOLICITUD_SERVICIOid = %s)
                 """ # * -> 1
             #ejecutar la sentencia sql
             cursor.execute(sql, [self.solicitud_servicio_id, self.solicitud_servicio_id])
@@ -105,14 +105,14 @@ class VehiculoConductor:
         try:
             #Consulta  
             sql = """
-                update vehiculo_conductor set 
+                update VEHICULO_CONDUCTOR set 
                     latitud = %s, 
                     longitud = %s, 
                     nombreEstado = %s, 
                     fechaHoraRegistro = now(), 
                     observacion = %s
 
-                where solicitud_servicioid = %s, vehiculoid = %s, conductorid = %s
+                where SOLICITUD_SERVICIOid = %s, VEHICULOid = %s, CONDUCTORid = %s
                 """
             #ejecutar la sentencia sql
             cursor.execute(sql, [self.latitud, self.longitud, self.nombreEstado, self.observacion, self.solicitud_servicio_id, self.vehiculo_id, self.conductor_id])

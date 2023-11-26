@@ -18,9 +18,9 @@ class EstadoSolicitud:
 
         sql = """
             SELECT * 
-            FROM estado_solicitud 
-            WHERE solicitud_servicioid = %s 
-            ORDER BY fechahoraregistro
+            FROM ESTADO_SOLICITUD 
+            WHERE SOLICITUD_SERVICIOid = %s 
+            ORDER BY fechaHoraRegistro
             """
         
         cursor.execute(sql, [self.solicitud_servicio_id])

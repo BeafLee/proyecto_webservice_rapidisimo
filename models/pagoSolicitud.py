@@ -39,7 +39,7 @@ class PagoSolicitud:
             print('ruta imagen almacenada: ', rutaImagen)
 
             #Consulta para registrar el pago
-            sql = "insert into pago_solicitud(nombreEntididad, numOperacion, fechaHoraOperacion, urlVoucher) values (%s,%s, now(),%s)"
+            sql = "insert into PAGO_SOLICITUD(nombreEntididad, numOperacion, fechaHoraOperacion, urlVoucher) values (%s,%s, now(),%s)"
 
             #ejecutar la sentencia sql
             cursor.execute(sql, [self.nombre_entidad, self.num_operacion, rutaImagen])
@@ -47,7 +47,7 @@ class PagoSolicitud:
             idPago = cursor.lastrowid
 
             #Consulta para registrar el id del pago registrado a la solicitud
-            sql = "update solicitud_servicio set pago_solicitudid = %s where id = %s"
+            sql = "update SOLICITUD_SERVICIO set PAGO_SOLICITUDid = %s where id = %s"
 
             #ejecutar la sentencia sql
             cursor.execute(sql, [idPago, idSolicitud])

@@ -31,7 +31,7 @@ class Solicitud():
                         select 
                             *
                         from 
-                            solicitud_servicio 
+                            SOLICITUD_SERVICIO 
                         order by 
                             id desc
                     """
@@ -42,7 +42,7 @@ class Solicitud():
                         select 
                             *
                             from 
-                            solicitud_servicio  
+                            SOLICITUD_SERVICIO  
                         where 
                             CLIENTEid = %s
                     """
