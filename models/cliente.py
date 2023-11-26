@@ -21,7 +21,7 @@ class Cliente:
 
         sql = """
             SELECT * 
-            FROM cliente
+            FROM CLIENTE
             """
         
         cursor.execute(sql)
@@ -48,7 +48,7 @@ class Cliente:
         cursor = con.cursor()
 
         #Preparar la sentencia para actualizar el token
-        sql = "update cliente set estado = %s where id = %s"
+        sql = "update CLIENTE set estado = %s where id = %s"
 
         try:
             #ejecutar la sentencia sql
@@ -76,10 +76,10 @@ class Cliente:
         cursor=con.cursor()
         #Preparar la sentencia para actualizar el token
         if self.tipoDoc=='DNI':
-            sql="""insert into cliente(tipoDoc,numeroDoc,nombres,direccion,email,telefono,estado,usuarioid) 
+            sql="""insert into CLIENTE(tipoDoc,numeroDoc,nombres,direccion,email,telefono,estado,USUARIOid) 
                     values(%s,%s,%s,%s,%s,%s,%s,%s)"""
         else:
-            sql="""insert into cliente(tipoDoc,numeroDoc,razonSocial,direccion,email,telefono,estado,usuarioid) 
+            sql="""insert into CLIENTE(tipoDoc,numeroDoc,razonSocial,direccion,email,telefono,estado,USUARIOid) 
                     values(%s,%s,%s,%s,%s,%s,%s,%s)"""
         try:
             #Ejecutra la sentencia sql
