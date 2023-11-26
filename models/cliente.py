@@ -67,3 +67,32 @@ class Cliente:
         finally:
             cursor.close()
             con.close()
+
+    def registrarCliente(self):
+        #Abrir conexion a la bd
+        con=db().open 
+        #Configurar para que los cambios de escritura en la BD se confirmen de manera manual
+        con.autocommit=False
+        cursor=con.cursor()
+        #Preparar la sentencia para actualizar el token
+        if self.tipoDoc=='DNI':
+            sql="""insert into cliente(tipoDoc,numeroDoc,nombres,direccion,email,telefono,estado,usuarioid) 
+                    values(%s,%s,%s,%s,%s,%s,%s,%s)"""
+        else:
+            sql="""insert into cliente(tipoDoc,numeroDoc,razonSocial,direccion,email,telefono,estado,usuarioid) 
+                    values(%s,%s,%s,%s,%s,%s,%s,%s)"""
+        try:
+            #Ejecutra la sentencia sql
+            if self.tipoDoc=='DNI':
+                cursor.execute(sql,[self.tipoDoc,self.numeroDoc,self.nombres,self.direccion,self.email,self.telefono,self.estado,self.usuarioid])
+                con.commit()
+            else:
+                cursor.execute(sql,[self.tipoDoc,self.numeroDoc,self.razonSocial,self.direccion,self.email,self.telefono,self.estado,self.usuarioid])
+                con.commit()
+            return json.dumps({'status':True,'data':None,'message':'Cliente registrado correctamente'})
+        except con.Error as error:
+            con.rollback()
+            return json.dumps({'status':False,'data':None,'message':format(error)})
+        finally:
+            cursor.close()
+            con.close()

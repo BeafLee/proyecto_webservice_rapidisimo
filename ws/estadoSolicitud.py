@@ -25,3 +25,4 @@ def registrarPago():
             return jsonify(resultado), 200
         else: 
             return jsonify(resultado), 500 #Reset Content
+        
