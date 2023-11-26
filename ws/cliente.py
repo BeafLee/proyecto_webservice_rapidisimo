@@ -32,7 +32,8 @@ def insertar():
     else:
         return jsonify(resultadoJSONObject),401
 
-
+@ws_cliente.route('/cliente', methods = ["GET"])
+#@vt.validar
 def listar():
 
     if request.method == 'GET':
