@@ -3,7 +3,7 @@ class Config():
     DB_PORT = 3306
     DB_USER = 'root'
     DB_PASSWORD = ''
-    DB_NAME = 'bdrapidisimo'
+    DB_NAME = 'bdcomercial'
 
 
 class SecretKey():
