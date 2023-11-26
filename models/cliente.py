@@ -42,3 +42,4 @@ class Cliente():
             cursor.close()
             con.close()
     
+    
