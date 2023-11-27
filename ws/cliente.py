@@ -105,7 +105,7 @@ def filtrarclientes():
 def registrarPago():
 
     if request.method == 'POST':
-        if not any(key not in request.form for key in ['cliente_id', 'estado']):
+        if any(key not in request.form for key in ['cliente_id', 'estado']):
             return jsonify({'status': False, 'data': None, 'message': 'Falta parámetros'}), 400
         
         cliente_id = request.form['cliente_id']

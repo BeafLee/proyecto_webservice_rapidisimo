@@ -74,7 +74,7 @@ def insertar():
 
 @ws_solicitud.route('/solicitud/detalle/<int:id>', methods=['GET'])
 #@vt.validar
-def listarSolicitudAtencion(id):
+def listarSolicitudAtencion2(id):
     if request.method == 'GET':
         obj = Solicitud(p_id=id)
         resultadoJSON = obj.obtenerDetalleSolicitud()

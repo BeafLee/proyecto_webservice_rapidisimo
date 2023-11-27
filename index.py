@@ -9,6 +9,8 @@ from ws.pagoSolicitud import ws_pagoSolicitud
 from ws.cliente import ws_cliente
 from ws.estadoSolicitud import ws_estadoSolicitud
 from ws.vehiculoConductor import ws_vehiculoConductor
+from ws.conductor import ws_conductor 
+from ws.vehiculo import  ws_vehiculo
 
 #Crear la variable de aplicación con Flask
 app = Flask(__name__)
@@ -23,6 +25,8 @@ app.register_blueprint(ws_session)
 app.register_blueprint(ws_tarifa)
 app.register_blueprint(ws_solicitud)
 app.register_blueprint(ws_estado_solicitud)
+app.register_blueprint(ws_conductor)
+app.register_blueprint(ws_vehiculo)
 @app.route('/')
 def home():
     return 'Servicios web Rapidisimo en ejecución'
