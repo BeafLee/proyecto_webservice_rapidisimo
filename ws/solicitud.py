@@ -22,7 +22,7 @@ def listarSolicitud(id):
             return jsonify(resultadoJSONObject), 205  #Recurso no encontrado
         
 @ws_solicitud.route('/solicitud/listaratencion/<string:tipo_doc>', methods=['GET'])
-@vt.validar
+#@vt.validar
 def listarSolicitudAtencion(tipo_doc):
     if request.method == 'GET':
         obj = Solicitud()
@@ -33,7 +33,6 @@ def listarSolicitudAtencion(tipo_doc):
         else:
             return jsonify(resultadoJSONObject), 205  #Recurso no encontrado
 
-ws_solicitud = Blueprint('ws_solicitud', __name__)
 
 @ws_solicitud.route('/solicitud/insertar', methods=['POST'])
 def insertar():
@@ -70,3 +69,41 @@ def insertar():
             return jsonify(resultadoJSONObject), 200
         else:
             return jsonify(resultadoJSONObject), 401
+        
+
+
+@ws_solicitud.route('/solicitud/detalle/<int:id>', methods=['GET'])
+#@vt.validar
+def listarSolicitudAtencion(id):
+    if request.method == 'GET':
+        obj = Solicitud(p_id=id)
+        resultadoJSON = obj.obtenerDetalleSolicitud()
+        resultadoJSONObject = json.loads(resultadoJSON)
+        if resultadoJSONObject['status'] == True:
+            return jsonify(resultadoJSONObject), 200 #OK
+        else:
+            return jsonify(resultadoJSONObject), 205  #Recurso no encontrado
+
+
+
+@ws_solicitud.route('/solicitud/conductor', methods=['POST'])
+def listarPorConductor():
+    if request.method == 'POST':
+        # Verifica que los parámetros necesarios estén presentes en el formulario
+        if 'conductor_id' not in request.form:
+            return jsonify({'status': False, 'data': None, 'message': 'Faltan parámetros'}), 400
+
+        conductor_id = request.form['conductor_id']
+
+        obj = Solicitud()
+
+        # Llama al método registrarSolicitud
+        resultadoJSON = obj.listarSolicitudConductor(conductor_id)
+
+        # Procesa el resultado y responde según sea necesario
+        resultadoJSONObject = json.loads(resultadoJSON)
+        if resultadoJSONObject['status'] == True:
+            return jsonify(resultadoJSONObject), 200
+        else:
+            return jsonify(resultadoJSONObject), 401
+        
