@@ -10,27 +10,39 @@ ws_cliente = Blueprint('ws_cliente',__name__)
 @ws_cliente.route('/cliente/insertar', methods=['POST'])
 @vt.validar
 def insertar():
-    if request.method == 'POST':
-        if 'nombres' not in request.form or 'direccion' not in request.form or 'email' not in request.form or 'usuario_id' not in request.form:
-            return jsonify({'status': False,'data':None,'message':'Falta parametros'}),400
-        #Leer el parametro de entrada
+    if request.method != 'POST':
+        return jsonify({'status': False, 'data': None, 'message': 'Método no permitido'}), 405
+
+    if 'tipoDoc' not in request.form:
+        return jsonify({'status': False, 'data': None, 'message': 'Falta parámetro tipoDoc'}), 400
+
     tipoDoc = request.form['tipoDoc']
-    numDoc = request.form['numDoc']    
-    nombres = request.form['nombres']
-    razonSocial = request.form['razonSocial']
-    direccion = request.form['direccion']
-    email = request.form['email']
-    telefono = request.form['telefono']
-    estado = request.form['estado']
-    usuarioid = request.form['usuario_id']
-    #Instanciar a la clase cliente
-    obj=Cliente(None,tipoDoc,numDoc,nombres,razonSocial,direccion,email,telefono,estado,usuarioid)
-    resultadoJSON=obj.registrarCliente()
-    resultadoJSONObject=json.loads(resultadoJSON)
-    if(resultadoJSONObject['status']==True):
-        return jsonify(resultadoJSONObject),200
+    numDoc = request.form.get('numDoc')
+    direccion = request.form.get('direccion')
+    email = request.form.get('email')
+    telefono = request.form.get('telefono')
+    estado = request.form.get('estado')
+    usuarioid = request.form.get('usuario_id')
+
+    if tipoDoc == 'DNI':
+        if not all([numDoc, direccion, email, usuarioid]):
+            return jsonify({'status': False, 'data': None, 'message': 'Faltan parámetros para DNI'}), 400
+        nombres = request.form.get('nombres')
+        obj = Cliente(None, tipoDoc, numDoc, nombres, None, direccion, email, telefono, estado, usuarioid)
     else:
-        return jsonify(resultadoJSONObject),401
+        if not all([numDoc, direccion, email, usuarioid]):
+            return jsonify({'status': False, 'data': None, 'message': 'Faltan parámetros para tipoDoc distinto a DNI'}), 400
+        razonSocial = request.form.get('razonSocial')
+        obj = Cliente(None, tipoDoc, numDoc, None, razonSocial, direccion, email, telefono, estado, usuarioid)
+
+    resultadoJSON = obj.registrarCliente()
+    resultadoJSONObject = json.loads(resultadoJSON)
+
+    if resultadoJSONObject['status']:
+        return jsonify(resultadoJSONObject), 200
+    else:
+        return jsonify(resultadoJSONObject), 401
+
 
 @ws_cliente.route('/cliente', methods = ["GET"])
 #@vt.validar

@@ -29,7 +29,7 @@ class Sesion():
         con.autocommit=False
         cursor=con.cursor()
         #Preparar la sentencia para actualizar el token
-        sql="UPDATE USUARIO set token=%s,estadoToken='1' where id=%s"
+        sql="UPDATE USUARIO set token=%s,estadoToken='A' where id=%s"
         try:
             #Ejecutra la sentencia sql
             cursor.execute(sql,[token,usuarioID])

@@ -3,7 +3,7 @@ from flask import jsonify, request
 from functools import wraps
 from config import SecretKey
 import jwt
-#from models.sesion import Sesion
+from models.sesion import Sesion
 import json
 
 def validar(fx): ## Funcion de envoltura 
@@ -45,7 +45,7 @@ def validarEstadoTokenUsuario(usuarioID):
     resultadoJSON = obj.validarEstadoToken(usuarioID)
     resultado = json.loads(resultadoJSON)
     if resultado['status'] == True:
-        estado_token_BD = resultado['data']['estado_token']
+        estado_token_BD = resultado['data']['estadoToken']
         if estado_token_BD == None:
             return False
         elif estado_token_BD == '0':

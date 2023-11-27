@@ -13,10 +13,22 @@ class Estado():
         con = db().open
         cursor = con.cursor()
         #Sentencia para dar de baja la tarifa actual antes de ingresar la tarifa nueva
-        sql_registrar="""insert into ESTADO_SOLICITUD(nombreEstado,fechaHoraRegistro,observacion,estado,SOLICITUD_SERVICIOid) values(%s,CURRENT_TIMESTAMP,%s,%s,%s)
+        sql_desactivar="""UPDATE ESTADO_SOLICITUD 
+                            SET estado='V' 
+                            WHERE id = (
+                                SELECT max_id 
+                                FROM (
+                                    SELECT MAX(id) AS max_id 
+                                    FROM estado_solicitud 
+                                    WHERE solicitud_servicioid = %s
+                                ) AS subquery_alias
+                            )
+                            """
+        cursor.execute(sql_desactivar,[self.solicitud_servicio_id])
+        sql_registrar="""insert into ESTADO_SOLICITUD(nombreEstado,fechaHoraRegistro,observacion,estado,SOLICITUD_SERVICIOid) values(%s,CURRENT_TIMESTAMP,%s,'A',%s)
         """        
         try:
-           cursor.execute(sql_registrar,[self.estado,self.observacion,self.estado,self.solicitud_servicio_id])      
+           cursor.execute(sql_registrar,[self.nombreEstado,self.observacion,self.solicitud_servicio_id])      
            con.commit()
            return json.dumps({'status':True,'data':None,'message':'Estado registrado correctamente'})  
         except con.Error as error:
