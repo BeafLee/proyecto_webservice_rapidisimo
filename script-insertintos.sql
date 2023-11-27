@@ -21,8 +21,8 @@ INSERT INTO CLIENTE (tipoDoc, numeroDoc, nombres, razonSocial, direccion, email,
 
 -- INSERT INTO para la tabla TARIFA
 INSERT INTO TARIFA (tarifa, estado, fechaHoraInicio, fechaHoraFin) VALUES
-(50.00, 'A', '2023-01-01 00:00:00', '2023-12-31 23:59:59'),
-(60.00, 'A', '2023-01-01 00:00:00', '2023-12-31 23:59:59'),
+(50.00, 'I', '2023-01-01 00:00:00', '2023-12-31 23:59:59'),
+(60.00, 'I', '2023-01-01 00:00:00', '2023-12-31 23:59:59'),
 (70.00, 'A', '2023-01-01 00:00:00', '2023-12-31 23:59:59');
 
 
@@ -35,23 +35,23 @@ INSERT INTO PAGO_SOLICITUD (nombreEntidad, numOperacion, fechaHoraOperacion, url
 
 -- INSERT INTO para la tabla SOLICITUD_SERVICIO
 INSERT INTO SOLICITUD_SERVICIO (descripcionCarga, claseCarga, tipoCarga, categoriaCarga, pesoKg, fechaHoraPartida, fechaHoraLlegada, direccionOrigen, direccionDestino, montoPagar, distanciaKm, TARIFAid, CLIENTEid, PAGO_SOLICITUDid) VALUES
-('Carga1', 'A', 'B', '01', 1000.00, '2023-01-01 08:00:00', '2023-01-01 16:00:00', 'DireccionOrigen1', 'DireccionDestino1', 80.00, 150.00, 1, 1, 1),
-('Carga2', 'B', 'C', '02', 2000.00, '2023-01-02 10:00:00', '2023-01-02 18:00:00', 'DireccionOrigen2', 'DireccionDestino2', 120.00, 200.00, 2, 2, 2),
-('Carga3', 'C', 'A', '03', 1500.00, '2023-01-03 12:00:00', '2023-01-03 20:00:00', 'DireccionOrigen3', 'DireccionDestino3', 100.00, 180.00, 3, 3, 3);
+('Carga1', 'P', 'C', 'AL', 1000.00, '2023-01-01 13:00:00', '2023-01-01 21:00:00', 'DireccionOrigen1', 'DireccionDestino1', 80.00, 150.00, 1, 1, 1),
+('Carga2', 'N', 'N', 'MC', 2000.00, '2023-01-02 15:00:00', '2023-01-02 23:00:00', 'DireccionOrigen2', 'DireccionDestino2', 120.00, 200.00, 2, 2, 2),
+('Carga3', 'P', 'C', 'AL', 1500.00, '2023-01-03 17:00:00', '2023-01-04 01:00:00', 'DireccionOrigen3', 'DireccionDestino3', 100.00, 180.00, 3, 3, 3);
 
 -- INSERT INTO para la tabla ESTADO_SOLICITUD
 INSERT INTO ESTADO_SOLICITUD (nombreEstado, fechaHoraRegistro, observacion, estado, SOLICITUD_SERVICIOid) VALUES
-('Estado1', '2023-01-01 08:30:00', 'ObservacionEstado1', 'A', 1),
-('Estado2', '2023-01-02 11:00:00', 'ObservacionEstado2', 'A', 2),
-('Estado3', '2023-01-03 13:30:00', 'ObservacionEstado3', 'A', 3);
+('PENDIENTE DE ATENCION', '2023-01-01 08:30:00', 'ObservacionEstado1', 'A', 1),
+('CONFIRMADO', '2023-01-02 11:00:00', 'ObservacionEstado2', 'A', 2),
+('PENDIENTE DE ATENCION', '2023-01-03 13:30:00', 'ObservacionEstado3', 'A', 3);
 
 
 
 -- INSERT INTO para la tabla USUARIO (conductor)
 INSERT INTO USUARIO (usuario, contrasena, tipoUsuario, token, estadoToken) VALUES
-('usuario_conductor1', 'contrasena1', 'C', 'token_conductor1', 'A'),
-('usuario_conductor2', 'contrasena2', 'C', 'token_conductor2', 'A'),
-('usuario_conductor3', 'contrasena3', 'C', 'token_conductor3', 'A');
+('usuario_conductor1', 'contrasena1', 'D', 'token_conductor1', 'A'),
+('usuario_conductor2', 'contrasena2', 'D', 'token_conductor2', 'A'),
+('usuario_conductor3', 'contrasena3', 'D', 'token_conductor3', 'A');
 
 -- INSERT INTO para la tabla CONDUCTOR
 INSERT INTO CONDUCTOR (tipoDoc, numeroDoc, apellidos, nombres, direccion, fechaNac, estado, USUARIOid) VALUES
@@ -67,6 +67,6 @@ INSERT INTO VEHICULO (matricula, capacidadTotal, tipoCarga, modelo, marca) VALUE
 
 -- INSERT INTO para la tabla VEHICULO_CONDUCTOR
 INSERT INTO VEHICULO_CONDUCTOR (SOLICITUD_SERVICIOid, VEHICULOid, CONDUCTORid, latitud, longitud, nombreEstado, fechaHoraRegistro, observacion) VALUES
-(1, 1, 1, 0.0, 0.0, 'Estado1', '2023-01-01 12:00:00', 'Observacion1'),
-(2, 2, 2, 0.0, 0.0, 'Estado2', '2023-01-02 14:30:00', 'Observacion2'),
-(3, 3, 3, 0.0, 0.0, 'Estado3', '2023-01-03 16:45:00', 'Observacion3');
+(1, 1, 1, 0.0, 0.0, 'VEHICULO EN TRANSITO', '2023-01-01 12:00:00', 'Observacion1'),
+(2, 2, 2, 0.0, 0.0, 'VEHICULO DETENIDO', '2023-01-02 14:30:00', 'Observacion2'),
+(3, 3, 3, 0.0, 0.0, 'VEHICULO DETENIDO POR INTERRUPCIÓN', '2023-01-03 16:45:00', 'Observacion3');

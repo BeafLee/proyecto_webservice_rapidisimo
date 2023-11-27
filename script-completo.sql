@@ -16,8 +16,32 @@
 
 
 -- Volcando estructura de base de datos para bdrapidisimo
-CREATE DATABASE IF NOT EXISTS `bdrapidisimo` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `bdrapidisimo` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `bdrapidisimo`;
+
+-- Volcando estructura para tabla bdrapidisimo.usuario
+CREATE TABLE IF NOT EXISTS `usuario` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `usuario` varchar(25) NOT NULL,
+  `contrasena` varchar(64) NOT NULL,
+  `tipoUsuario` char(1) NOT NULL,
+  `token` varchar(100) NOT NULL,
+  `estadoToken` char(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `usuario` (`usuario`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Volcando datos para la tabla bdrapidisimo.usuario: ~9 rows (aproximadamente)
+INSERT INTO `usuario` (`id`, `usuario`, `contrasena`, `tipoUsuario`, `token`, `estadoToken`) VALUES
+	(1, 'usuario1_cliente', 'contrasena1', 'C', 'token1', 'A'),
+	(2, 'usuario2_cliente', 'contrasena2', 'C', 'token2', 'A'),
+	(3, 'usuario3_cliente', 'contrasena3', 'C', 'token3', 'A'),
+	(4, 'usuario4_personal', 'contrasena4', 'P', 'token4', 'A'),
+	(5, 'usuario5_personal', 'contrasena5', 'P', 'token5', 'A'),
+	(6, 'usuario6_personal', 'contrasena6', 'P', 'token6', 'A'),
+	(7, 'usuario_conductor1', 'contrasena1', 'D', 'token_conductor1', 'A'),
+	(8, 'usuario_conductor2', 'contrasena2', 'D', 'token_conductor2', 'A'),
+	(9, 'usuario_conductor3', 'contrasena3', 'D', 'token_conductor3', 'A');
 
 -- Volcando estructura para tabla bdrapidisimo.cliente
 CREATE TABLE IF NOT EXISTS `cliente` (
@@ -34,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `cliente` (
   PRIMARY KEY (`id`),
   KEY `FKCLIENTE555484` (`USUARIOid`),
   CONSTRAINT `FKCLIENTE555484` FOREIGN KEY (`USUARIOid`) REFERENCES `usuario` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla bdrapidisimo.cliente: ~3 rows (aproximadamente)
 INSERT INTO `cliente` (`id`, `tipoDoc`, `numeroDoc`, `nombres`, `razonSocial`, `direccion`, `email`, `telefono`, `estado`, `USUARIOid`) VALUES
@@ -56,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `conductor` (
   PRIMARY KEY (`id`),
   KEY `FKCONDUCTOR116504` (`USUARIOid`),
   CONSTRAINT `FKCONDUCTOR116504` FOREIGN KEY (`USUARIOid`) REFERENCES `usuario` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla bdrapidisimo.conductor: ~3 rows (aproximadamente)
 INSERT INTO `conductor` (`id`, `tipoDoc`, `numeroDoc`, `apellidos`, `nombres`, `direccion`, `fechaNac`, `estado`, `USUARIOid`) VALUES
@@ -64,24 +88,22 @@ INSERT INTO `conductor` (`id`, `tipoDoc`, `numeroDoc`, `apellidos`, `nombres`, `
 	(2, 'DNI', '55555555', 'Conductor2Apellido', 'Conductor2Nombre', 'DireccionConductor2', '1987-08-22', 'A', 8),
 	(3, 'DNI', '66666666', 'Conductor3Apellido', 'Conductor3Nombre', 'DireccionConductor3', '1990-05-15', 'A', 9);
 
--- Volcando estructura para tabla bdrapidisimo.estado_solicitud
-CREATE TABLE IF NOT EXISTS `estado_solicitud` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `nombreEstado` varchar(50) NOT NULL,
-  `fechaHoraRegistro` timestamp NOT NULL,
-  `observacion` text NOT NULL,
-  `estado` char(1) NOT NULL,
-  `SOLICITUD_SERVICIOid` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKESTADO_SOL268616` (`SOLICITUD_SERVICIOid`),
-  CONSTRAINT `FKESTADO_SOL268616` FOREIGN KEY (`SOLICITUD_SERVICIOid`) REFERENCES `solicitud_servicio` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla bdrapidisimo.estado_solicitud: ~3 rows (aproximadamente)
-INSERT INTO `estado_solicitud` (`id`, `nombreEstado`, `fechaHoraRegistro`, `observacion`, `estado`, `SOLICITUD_SERVICIOid`) VALUES
-	(1, 'PENDIENTE DE ATENCION', '2023-01-01 13:30:00', 'ObservacionEstado1', 'A', 1),
-	(2, 'CONFIRMADO', '2023-01-02 16:00:00', 'ObservacionEstado2', 'A', 2),
-	(3, 'PENDIENTE DE ATENCION', '2023-01-03 18:30:00', 'ObservacionEstado3', 'A', 3);
+-- Volcando estructura para tabla bdrapidisimo.tarifa
+CREATE TABLE IF NOT EXISTS `tarifa` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `tarifa` decimal(5,2) NOT NULL,
+  `estado` char(1) NOT NULL,
+  `fechaHoraInicio` timestamp NOT NULL,
+  `fechaHoraFin` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Volcando datos para la tabla bdrapidisimo.tarifa: ~3 rows (aproximadamente)
+INSERT INTO `tarifa` (`id`, `tarifa`, `estado`, `fechaHoraInicio`, `fechaHoraFin`) VALUES
+	(1, 50.00, 'I', '2023-01-01 05:00:00', '2024-01-01 04:59:59'),
+	(2, 60.00, 'I', '2023-01-01 05:00:00', '2024-01-01 04:59:59'),
+	(3, 70.00, 'A', '2023-01-01 05:00:00', '2024-01-01 04:59:59');
 
 -- Volcando estructura para tabla bdrapidisimo.pago_solicitud
 CREATE TABLE IF NOT EXISTS `pago_solicitud` (
@@ -91,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `pago_solicitud` (
   `fechaHoraOperacion` timestamp NOT NULL,
   `urlVoucher` varchar(150) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla bdrapidisimo.pago_solicitud: ~3 rows (aproximadamente)
 INSERT INTO `pago_solicitud` (`id`, `nombreEntidad`, `numOperacion`, `fechaHoraOperacion`, `urlVoucher`) VALUES
@@ -99,29 +121,6 @@ INSERT INTO `pago_solicitud` (`id`, `nombreEntidad`, `numOperacion`, `fechaHoraO
 	(2, 'Entidad2', '98765432', '2023-01-02 17:45:00', 'http://url2.com/voucher2'),
 	(3, 'Entidad3', '55555555', '2023-01-03 20:00:00', 'http://url3.com/voucher3');
 
--- Volcando estructura para tabla bdrapidisimo.personal
-CREATE TABLE IF NOT EXISTS `personal` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `tipoDoc` char(3) NOT NULL,
-  `numeroDoc` varchar(20) NOT NULL,
-  `apellidos` varchar(50) NOT NULL,
-  `nombres` varchar(50) NOT NULL,
-  `direccion` varchar(200) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `telefono` varchar(12) NOT NULL,
-  `estado` char(1) NOT NULL,
-  `fechaNac` date NOT NULL,
-  `USUARIOid` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKPERSONAL775969` (`USUARIOid`),
-  CONSTRAINT `FKPERSONAL775969` FOREIGN KEY (`USUARIOid`) REFERENCES `usuario` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Volcando datos para la tabla bdrapidisimo.personal: ~3 rows (aproximadamente)
-INSERT INTO `personal` (`id`, `tipoDoc`, `numeroDoc`, `apellidos`, `nombres`, `direccion`, `email`, `telefono`, `estado`, `fechaNac`, `USUARIOid`) VALUES
-	(1, 'DNI', '12345678', 'Apellido1', 'Nombre1', 'Direccion1', 'email1@example.com', '123456789', 'A', '1990-01-01', 4),
-	(2, 'DNI', '98765432', 'Apellido2', 'Nombre2', 'Direccion2', 'email2@example.com', '987654321', 'A', '1985-05-15', 5),
-	(3, 'DNI', '87654321', 'Apellido3', 'Nombre3', 'Direccion3', 'email3@example.com', '111222333', 'A', '1988-10-20', 6);
 
 -- Volcando estructura para tabla bdrapidisimo.solicitud_servicio
 CREATE TABLE IF NOT EXISTS `solicitud_servicio` (
@@ -147,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `solicitud_servicio` (
   CONSTRAINT `FKSOLICITUD_53103` FOREIGN KEY (`CLIENTEid`) REFERENCES `cliente` (`id`),
   CONSTRAINT `FKSOLICITUD_878765` FOREIGN KEY (`PAGO_SOLICITUDid`) REFERENCES `pago_solicitud` (`id`),
   CONSTRAINT `FKSOLICITUD_899861` FOREIGN KEY (`TARIFAid`) REFERENCES `tarifa` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla bdrapidisimo.solicitud_servicio: ~3 rows (aproximadamente)
 INSERT INTO `solicitud_servicio` (`id`, `descripcionCarga`, `claseCarga`, `tipoCarga`, `categoriaCarga`, `pesoKg`, `fechaHoraPartida`, `fechaHoraLlegada`, `direccionOrigen`, `direccionDestino`, `montoPagar`, `distanciaKm`, `TARIFAid`, `CLIENTEid`, `PAGO_SOLICITUDid`) VALUES
@@ -155,45 +154,51 @@ INSERT INTO `solicitud_servicio` (`id`, `descripcionCarga`, `claseCarga`, `tipoC
 	(2, 'Carga2', 'N', 'N', 'MC', 2000.00, '2023-01-02 15:00:00', '2023-01-02 23:00:00', 'DireccionOrigen2', 'DireccionDestino2', 120.00, 200.00, 2, 2, 2),
 	(3, 'Carga3', 'P', 'C', 'AL', 1500.00, '2023-01-03 17:00:00', '2023-01-04 01:00:00', 'DireccionOrigen3', 'DireccionDestino3', 100.00, 180.00, 3, 3, 3);
 
--- Volcando estructura para tabla bdrapidisimo.tarifa
-CREATE TABLE IF NOT EXISTS `tarifa` (
+
+-- Volcando estructura para tabla bdrapidisimo.estado_solicitud
+CREATE TABLE IF NOT EXISTS `estado_solicitud` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `tarifa` decimal(5,2) NOT NULL,
+  `nombreEstado` varchar(50) NOT NULL,
+  `fechaHoraRegistro` timestamp NOT NULL,
+  `observacion` text NOT NULL,
   `estado` char(1) NOT NULL,
-  `fechaHoraInicio` timestamp NOT NULL,
-  `fechaHoraFin` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Volcando datos para la tabla bdrapidisimo.tarifa: ~3 rows (aproximadamente)
-INSERT INTO `tarifa` (`id`, `tarifa`, `estado`, `fechaHoraInicio`, `fechaHoraFin`) VALUES
-	(1, 50.00, 'I', '2023-01-01 05:00:00', '2024-01-01 04:59:59'),
-	(2, 60.00, 'I', '2023-01-01 05:00:00', '2024-01-01 04:59:59'),
-	(3, 70.00, 'A', '2023-01-01 05:00:00', '2024-01-01 04:59:59');
-
--- Volcando estructura para tabla bdrapidisimo.usuario
-CREATE TABLE IF NOT EXISTS `usuario` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `usuario` varchar(25) NOT NULL,
-  `contrasena` varchar(64) NOT NULL,
-  `tipoUsuario` char(1) NOT NULL,
-  `token` varchar(100) NOT NULL,
-  `estadoToken` char(1) NOT NULL,
+  `SOLICITUD_SERVICIOid` int NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `usuario` (`usuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `FKESTADO_SOL268616` (`SOLICITUD_SERVICIOid`),
+  CONSTRAINT `FKESTADO_SOL268616` FOREIGN KEY (`SOLICITUD_SERVICIOid`) REFERENCES `solicitud_servicio` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla bdrapidisimo.usuario: ~9 rows (aproximadamente)
-INSERT INTO `usuario` (`id`, `usuario`, `contrasena`, `tipoUsuario`, `token`, `estadoToken`) VALUES
-	(1, 'usuario1_cliente', 'contrasena1', 'C', 'token1', 'A'),
-	(2, 'usuario2_cliente', 'contrasena2', 'C', 'token2', 'A'),
-	(3, 'usuario3_cliente', 'contrasena3', 'C', 'token3', 'A'),
-	(4, 'usuario4_personal', 'contrasena4', 'P', 'token4', 'A'),
-	(5, 'usuario5_personal', 'contrasena5', 'P', 'token5', 'A'),
-	(6, 'usuario6_personal', 'contrasena6', 'P', 'token6', 'A'),
-	(7, 'usuario_conductor1', 'contrasena1', 'D', 'token_conductor1', 'A'),
-	(8, 'usuario_conductor2', 'contrasena2', 'D', 'token_conductor2', 'A'),
-	(9, 'usuario_conductor3', 'contrasena3', 'D', 'token_conductor3', 'A');
+-- Volcando datos para la tabla bdrapidisimo.estado_solicitud: ~3 rows (aproximadamente)
+INSERT INTO `estado_solicitud` (`id`, `nombreEstado`, `fechaHoraRegistro`, `observacion`, `estado`, `SOLICITUD_SERVICIOid`) VALUES
+	(1, 'PENDIENTE DE ATENCION', '2023-01-01 13:30:00', 'ObservacionEstado1', 'A', 1),
+	(2, 'CONFIRMADO', '2023-01-02 16:00:00', 'ObservacionEstado2', 'A', 2),
+	(3, 'PENDIENTE DE ATENCION', '2023-01-03 18:30:00', 'ObservacionEstado3', 'A', 3);
+
+-- Volcando estructura para tabla bdrapidisimo.personal
+CREATE TABLE IF NOT EXISTS `personal` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `tipoDoc` char(3) NOT NULL,
+  `numeroDoc` varchar(20) NOT NULL,
+  `apellidos` varchar(50) NOT NULL,
+  `nombres` varchar(50) NOT NULL,
+  `direccion` varchar(200) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `telefono` varchar(12) NOT NULL,
+  `estado` char(1) NOT NULL,
+  `fechaNac` date NOT NULL,
+  `USUARIOid` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKPERSONAL775969` (`USUARIOid`),
+  CONSTRAINT `FKPERSONAL775969` FOREIGN KEY (`USUARIOid`) REFERENCES `usuario` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Volcando datos para la tabla bdrapidisimo.personal: ~3 rows (aproximadamente)
+INSERT INTO `personal` (`id`, `tipoDoc`, `numeroDoc`, `apellidos`, `nombres`, `direccion`, `email`, `telefono`, `estado`, `fechaNac`, `USUARIOid`) VALUES
+	(1, 'DNI', '12345678', 'Apellido1', 'Nombre1', 'Direccion1', 'email1@example.com', '123456789', 'A', '1990-01-01', 4),
+	(2, 'DNI', '98765432', 'Apellido2', 'Nombre2', 'Direccion2', 'email2@example.com', '987654321', 'A', '1985-05-15', 5),
+	(3, 'DNI', '87654321', 'Apellido3', 'Nombre3', 'Direccion3', 'email3@example.com', '111222333', 'A', '1988-10-20', 6);
+
+
 
 -- Volcando estructura para tabla bdrapidisimo.vehiculo
 CREATE TABLE IF NOT EXISTS `vehiculo` (
@@ -204,7 +209,7 @@ CREATE TABLE IF NOT EXISTS `vehiculo` (
   `modelo` varchar(50) NOT NULL,
   `marca` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla bdrapidisimo.vehiculo: ~3 rows (aproximadamente)
 INSERT INTO `vehiculo` (`id`, `matricula`, `capacidadTotal`, `tipoCarga`, `modelo`, `marca`) VALUES
@@ -228,7 +233,7 @@ CREATE TABLE IF NOT EXISTS `vehiculo_conductor` (
   CONSTRAINT `FKVEHICULO_C127842` FOREIGN KEY (`CONDUCTORid`) REFERENCES `conductor` (`id`),
   CONSTRAINT `FKVEHICULO_C166246` FOREIGN KEY (`SOLICITUD_SERVICIOid`) REFERENCES `solicitud_servicio` (`id`),
   CONSTRAINT `FKVEHICULO_C622019` FOREIGN KEY (`VEHICULOid`) REFERENCES `vehiculo` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla bdrapidisimo.vehiculo_conductor: ~3 rows (aproximadamente)
 INSERT INTO `vehiculo_conductor` (`SOLICITUD_SERVICIOid`, `VEHICULOid`, `CONDUCTORid`, `latitud`, `longitud`, `nombreEstado`, `fechaHoraRegistro`, `observacion`) VALUES
