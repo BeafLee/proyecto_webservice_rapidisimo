@@ -9,5 +9,6 @@ Jinja2==3.1.2
 jwt==1.3.1
 MarkupSafe==2.1.3
 mysqlclient==2.2.0
+googlemaps
 pycparser==2.21
 Werkzeug==3.0.1
