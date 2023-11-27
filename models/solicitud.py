@@ -237,3 +237,45 @@ class Solicitud():
         finally:
             cursor.close()
             con.close()
+
+def obtenerDetalleSolicitud(self):
+        con = db().open
+
+        #Crear un cursor
+        cursor = con.cursor()
+
+        sql =   """
+                    select *
+                    from SOLICITUD_SERVICIO             
+                    where id = %s
+                """
+
+
+        #Ejecutar la sentencia
+        cursor.execute(sql, [self.id])
+        
+        #Recuperar los datos y almacenarlos en la variable "datos"
+        solicitud = cursor.fetchone()
+
+        sql = """
+            SELECT vc.*, v.matricula, CONCAT(c.apellidos, ', ', c.nombres) as conductor 
+            FROM VEHICULO_CONDUCTOR vc
+                INNER JOIN VEHICULO v on v.id = vc.VEHICULOid
+                INNER JOIN CONDUCTOR c on c.id = vc.CONDUCTORid
+            WHERE SOLICITUD_SERVICIOid = %s
+            """
+        
+        cursor.execute(sql, [self.id])
+
+        vehiculos_conductores = cursor.fetchall()
+
+        solicitud['transportistas'] = vehiculos_conductores
+
+        cursor.close()
+        con.close()
+
+        #Retornar los resultados
+        if solicitud:
+            return json.dumps({'status': True, 'data': solicitud, 'message': 'Lista de solicitudes'}, cls=CustomJsonEncoder)
+        else:
+            return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})
