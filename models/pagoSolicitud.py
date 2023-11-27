@@ -65,4 +65,29 @@ class PagoSolicitud:
 
         finally:
             cursor.close()
-            con.close()  
+            con.close()
+
+    def estadoPago(self):
+        con = db().open
+
+        cursor = con.cursor()
+
+        sql = """
+            SELECT E.estado, E.nombreEstado, P.id, P.nombreEntidad, P.numOperacion, P.fechaHoraOperacion, P.urlVoucher
+            FROM PAGO_SOLICITUD P
+            INNER JOIN SOLICITUD_SERVICIO S ON P.id = S.PAGO_SOLICITUDid
+            INNER JOIN ESTADO_SOLICITUD E ON S.id = E.SOLICITUD_SERVICIOid
+            WHERE E.nombreEstado = 'RECHAZADO' OR E.nombreEstado = 'CONFIRMADO'
+            """
+        
+        cursor.execute(sql)
+
+        datos = cursor.fetchall()
+
+        cursor.close()
+        con.close()
+
+        if datos:
+            return json.dumps({'status': True, 'data': datos, 'message': 'Lista de los conductores'})
+        else:
+            return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})

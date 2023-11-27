@@ -36,6 +36,108 @@ class Cliente:
         else:
             return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})
         
+    def listadoClientesDNI(self):
+        con = db().open
+
+        cursor = con.cursor()
+
+        sql = """
+            SELECT tipoDoc, numeroDoc, nombres, direccion, email, telefono, estado, USUARIOid
+            FROM CLIENTE
+            WHERE tipoDoc = 'DNI'
+            ORDER BY numeroDoc
+            """
+        
+        cursor.execute(sql)
+
+        datos = cursor.fetchall()
+
+        cursor.close()
+        con.close()
+
+        if datos:
+            return json.dumps({'status': True, 'data': datos, 'message': 'Lista de los clientes'})
+        else:
+            return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})
+        
+    def listadoClientesRUC(self):
+        con = db().open
+
+        cursor = con.cursor()
+
+        sql = """
+            SELECT tipoDoc, numeroDoc, razonSocial, direccion, email, telefono, estado, USUARIOid
+            FROM CLIENTE
+            WHERE tipoDoc = 'RUC'
+            ORDER BY numeroDoc
+            """
+        
+        cursor.execute(sql)
+
+        datos = cursor.fetchall()
+
+        cursor.close()
+        con.close()
+
+        if datos:
+            return json.dumps({'status': True, 'data': datos, 'message': 'Lista de los clientes'})
+        else:
+            return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})
+    
+    def listadoClientesNombre(self):
+        con = db().open
+
+        cursor = con.cursor()
+
+        if self.tipo_doc=='DNI':
+            sql = """
+            SELECT tipoDoc, numeroDoc, nombres, direccion, email, telefono, estado, USUARIOid
+            FROM CLIENTE
+            WHERE nombres LIKE %s
+            ORDER BY numeroDoc
+            """
+        elif self.tipo_doc=='RUC':
+            sql = """
+            SELECT tipoDoc, numeroDoc, razonSocial, direccion, email, telefono, estado, USUARIOid
+            FROM CLIENTE
+            WHERE razonSocial LIKE %s
+            ORDER BY numeroDoc
+            """
+
+        cursor.execute(sql)
+
+        datos = cursor.fetchall()
+
+        cursor.close()
+        con.close()
+
+        if datos:
+            return json.dumps({'status': True, 'data': datos, 'message': 'Lista de los clientes'})
+        else:
+            return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})
+        
+    def listadoClientesEstado(self):
+        con = db().open
+
+        cursor = con.cursor()
+
+        sql = """
+            SELECT * 
+            FROM CLIENTE
+            WHERE estado = %s
+            """
+        
+        cursor.execute(sql)
+
+        datos = cursor.fetchall()
+
+        cursor.close()
+        con.close()
+
+        if datos:
+            return json.dumps({'status': True, 'data': datos, 'message': 'Lista de los clientes'})
+        else:
+            return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})
 
     def actualizarEstado(self):
         #Abrimos conexion a la bd

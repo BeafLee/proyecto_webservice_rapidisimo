@@ -30,9 +30,9 @@ class VehiculoConductor:
             """
         else:
             sql = """
-            SELECT * 
+            SELECT vc.*, v.matricula, c.apellidos || ', ' || c.nombres as conductor 
             FROM VEHICULO_CONDUCTOR 
-            WHERE SOLICITUD_SERVICIOid = %s 
+            WHERE SOLICITUD_SERVICIOid = %s
             """
         
         cursor.execute(sql, [self.solicitud_servicio_id, self.solicitud_servicio_id])
