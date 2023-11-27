@@ -46,14 +46,14 @@ def insertar():
         claseCarga = request.form['claseCarga']
         tipoCarga = request.form['tipoCarga']
         categoriaCarga = request.form['categoriaCarga']
-        pesoKg = request.form['pesoKg']
+        pesoKg = float(request.form['pesoKg'])
         fechaHoraPartida = request.form['fechaHoraPartida']
         fechaHoraLlegada = request.form['fechaHoraLlegada']
         source = request.form['direccionOrigen']
         destination = request.form['direccionDestino']
-        TARIFAid = request.form['TARIFAid']
-        CLIENTEid = request.form['CLIENTEid']
-        PAGO_SOLICITUDid = request.form['PAGO_SOLICITUDid']
+        TARIFAid = int(request.form['TARIFAid'])
+        CLIENTEid = int(request.form['CLIENTEid'])
+        PAGO_SOLICITUDid = int(request.form['PAGO_SOLICITUDid'])
 
         obj = Solicitud(
             None, descripcionCarga, claseCarga, tipoCarga, categoriaCarga, pesoKg,

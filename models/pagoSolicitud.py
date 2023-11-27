@@ -3,6 +3,7 @@ import os
 import uuid
 import json
 import base64
+from util import CustomJsonEncoder
 
 class PagoSolicitud:
     def __init__(self, id_pago=None, nombre_entidad=None, num_operacion=None, fecha_hora_operacion=None, url_voucher=None):
@@ -88,7 +89,7 @@ class PagoSolicitud:
         con.close()
 
         if datos:
-            return json.dumps({'status': True, 'data': datos, 'message': 'Estado del pago'})
+            return json.dumps({'status': True, 'data': datos, 'message': 'Estado del pago'}, cls=CustomJsonEncoder)
         else:
             return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})
 

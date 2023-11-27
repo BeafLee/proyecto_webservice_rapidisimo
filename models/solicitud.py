@@ -176,6 +176,7 @@ class Solicitud():
         source = origen
         destination = destino
         now = datetime.now()
+        
 
         try:
             # Obtiene la distancia desde Google Maps
@@ -185,20 +186,20 @@ class Solicitud():
             # Consulta SQL con la distancia calculada
             sql = """
                 INSERT INTO SOLICITUD_SERVICIO (
-                    descripcionCarga,
-                    claseCarga,
-                    tipoCarga,
-                    categoriaCarga,
-                    pesoKg,
-                    fechaHoraPartida,
-                    fechaHoraLlegada,
-                    direccionOrigen,
-                    direccionDestino,
-                    montoPagar,
-                    distanciaKm,
-                    TARIFAid,
-                    CLIENTEid,
-                    PAGO_SOLICITUDid
+                    SV.descripcionCarga,
+                    SV.claseCarga,
+                    SV.tipoCarga,
+                    SV.categoriaCarga,
+                    SV.pesoKg,
+                    SV.fechaHoraPartida,
+                    SV.fechaHoraLlegada,
+                    SV.direccionOrigen,
+                    SV.direccionDestino,
+                    SV.montoPagar,
+                    SV.distanciaKm,
+                    SV.TARIFAid,
+                    SV.CLIENTEid,
+                    SV.PAGO_SOLICITUDid
                 )
                 VALUES (
                     %s,
@@ -222,6 +223,7 @@ class Solicitud():
                     %s
                 );
                 """
+            print(type(self.fechaHoraPartida), type(self.fechaHoraLlegada), type(self.tipoCarga), type(self.categoriaCarga))
 
             cursor.execute(sql, [
                 self.descripcionCarga, self.claseCarga, self.tipoCarga, self.categoriaCarga,
