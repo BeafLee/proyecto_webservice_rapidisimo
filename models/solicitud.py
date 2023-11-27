@@ -47,11 +47,33 @@ class Solicitud():
         else:
             sql =   """
                         select 
-                            *
-                            from 
-                            SOLICITUD_SERVICIO  
-                        where 
-                            CLIENTEid = %s
+                        S.descripcionCarga,
+                        S.claseCarga,
+                        S.tipoCarga,
+                        S.categoriaCarga,
+                        S.pesoKg,
+                        S.fechaHoraPartida,
+                        S.fechaHoraLlegada,
+                        S.direccionOrigen,
+                        S.direccionDestino,
+                        S.montoPagar,
+                        S.distanciaKm,
+                        T.tarifa,
+                        concat(P.nombreEntidad, ' - ', P.numOperacion) as pago,
+                        VC.nombreEstado
+                    from 
+                        SOLICITUD_SERVICIO S
+                    inner join
+                        VEHICULO_CONDUCTOR VC on S.id = VC.SOLICITUD_SERVICIOid
+                    inner join
+                        CLIENTE C on C.id = S.CLIENTEid
+                    inner join
+                        PAGO_SOLICITUD P on P.id = S.PAGO_SOLICITUDid
+                    inner join
+                        TARIFA T on T.id = S.TARIFAid
+                    where
+                        S.CLIENTEid=1
+                    
                     """
             #Ejecutar la sentencia
             cursor.execute(sql, [id])
@@ -238,7 +260,7 @@ class Solicitud():
             cursor.close()
             con.close()
 
-def obtenerDetalleSolicitud(self):
+    def obtenerDetalleSolicitud(self):
         con = db().open
 
         #Crear un cursor
@@ -277,5 +299,45 @@ def obtenerDetalleSolicitud(self):
         #Retornar los resultados
         if solicitud:
             return json.dumps({'status': True, 'data': solicitud, 'message': 'Lista de solicitudes'}, cls=CustomJsonEncoder)
+        else:
+            return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})
+        
+
+    def listarSolicitudConductor(self,  conductor_id):
+        con = db().open
+
+        #Crear un cursor
+        cursor = con.cursor()
+        if id == 0:
+            sql =   """
+                        select 
+                            *
+                        from 
+                            SOLICITUD_SERVICIO 
+                        order by 
+                            id desc
+                    """
+            #Ejecutar la sentencia
+            cursor.execute(sql)
+        else:
+            sql =   """
+                        select 
+                            *
+                        from SOLICITUD_SERVICIO s
+                            inner join VEHICULO_CONDUCTOR vc on s.id = vc.SOLICITUD_SERVICIOid
+                        where 
+                            CONDUCTORid = %s
+                    """
+            #Ejecutar la sentencia
+            cursor.execute(sql, [conductor_id])
+        
+        #Recuperar los datos y almacenarlos en la variable "datos"
+        solicitudes = cursor.fetchall()
+        cursor.close()
+        con.close()
+
+        #Retornar los resultados
+        if solicitudes:
+            return json.dumps({'status': True, 'data': solicitudes, 'message': 'Lista de solicitudes'}, cls=CustomJsonEncoder)
         else:
             return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})
