@@ -82,6 +82,11 @@ def filtrarclientes():
         else:
             return jsonify(resultado), 500  # Reset Content
         
+#/cliente/listar?tipo_filtro=DNI&valor_filtro=11111111
+#/cliente/listar?tipo_filtro=RUC&valor_filtro=22222222
+#/cliente/listar?tipo_filtro=nombres&valor_filtro=Cliente1
+#/cliente/listar?tipo_filtro=estado&valor_filtro=A
+        
 @ws_cliente.route('/cliente/estado', methods = ["POST"])
 #@vt.validar
 def registrarPago():
