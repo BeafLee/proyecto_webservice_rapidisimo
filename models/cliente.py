@@ -154,7 +154,7 @@ class Cliente:
 
         try:
             #ejecutar la sentencia sql
-            cursor.execute(sql, [self.estado, self.id])
+            cursor.execute(sql, [self.estado, self.id_cliente])
             #Confirmar la sentencia de ejecución
             con.commit()
 

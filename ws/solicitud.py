@@ -7,7 +7,7 @@ import datetime
 import validarToken as vt
 ws_solicitud = Blueprint('ws_solicitud',__name__)
 @ws_solicitud.route('/solicitud/listar/<int:id>', methods=['GET'])
-@vt.validar
+#@vt.validar
 def listarSolicitud(id):
     if request.method == 'GET':
         #Instanciar a la clase Cliente
@@ -21,7 +21,6 @@ def listarSolicitud(id):
         else:
             return jsonify(resultadoJSONObject), 205  #Recurso no encontrado
         
-ws_solicitud = Blueprint('ws_solicitud',__name__)
 @ws_solicitud.route('/solicitud/listaratencion/<string:tipo_doc>', methods=['GET'])
 @vt.validar
 def listarSolicitudAtencion(tipo_doc):

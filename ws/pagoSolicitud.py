@@ -10,7 +10,7 @@ ws_pagoSolicitud = Blueprint("ws_pagoSolicitud", __name__)
 def registrarPago():
 
     if request.method == 'POST':
-        if not any(key not in request.form for key in ['solicitud_id', 'nombre_entidad', 'num_operacion', 'voucher']):
+        if any(key not in request.form for key in ['solicitud_id', 'nombre_entidad', 'num_operacion', 'voucher']):
             return jsonify({'status': False, 'data': None, 'message': 'Falta parámetros'}), 400
         
         solicitud_id = request.form['solicitud_id']

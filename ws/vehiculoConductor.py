@@ -27,12 +27,12 @@ def listarUbicacion():
             return jsonify(resultado), 500 #Reset Content
         
 
-@ws_vehiculoConductor.route('/solicitud/asignar', methods = ["POST"])
+@ws_vehiculoConductor.route('/solicitud/asignarVehiculo', methods = ["POST"])
 #@vt.validar
 def asignarVehiculo():
 
     if request.method == 'POST':
-        if not any(key not in request.form for key in ['solicitud_servicio_id', 'vehiculo_id', 'conductor_id']):
+        if any(key not in request.form for key in ['solicitud_servicio_id', 'vehiculo_id', 'conductor_id']):
             return jsonify({'status': False, 'data': None, 'message': 'Falta parámetros'}), 400
         
         solicitud_servicio_id = request.form['solicitud_servicio_id']
@@ -55,7 +55,7 @@ def asignarVehiculo():
 def actualizarEstadoVehiculo():
 
     if request.method == 'POST':
-        if not any(key not in request.form for key in ['solicitud_servicio_id', 'vehiculo_id', 'conductor_id', 'latitud', 'longitud', 'nombre_estado', 'observacion']):
+        if any(key not in request.form for key in ['solicitud_servicio_id', 'vehiculo_id', 'conductor_id', 'latitud', 'longitud', 'nombre_estado', 'observacion']):
             return jsonify({'status': False, 'data': None, 'message': 'Falta parámetros'}), 400
         
         solicitud_servicio_id = request.form['solicitud_servicio_id']

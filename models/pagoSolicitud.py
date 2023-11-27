@@ -26,7 +26,7 @@ class PagoSolicitud:
             idCliente = 1
             
             #Almacenar la imagen (Base64) del voucher y que nos retorne la url
-            rutaCarpeta = os.path.join('/static/cliente/' + idCliente)
+            rutaCarpeta = os.path.join('/static/cliente/' + str(idCliente))
             if not os.path.exists(rutaCarpeta):
                 os.makedirs(rutaCarpeta)
 
@@ -39,7 +39,7 @@ class PagoSolicitud:
             print('ruta imagen almacenada: ', rutaImagen)
 
             #Consulta para registrar el pago
-            sql = "insert into PAGO_SOLICITUD(nombreEntididad, numOperacion, fechaHoraOperacion, urlVoucher) values (%s,%s, now(),%s)"
+            sql = "insert into PAGO_SOLICITUD(nombreEntidad, numOperacion, fechaHoraOperacion, urlVoucher) values (%s,%s, now(),%s)"
 
             #ejecutar la sentencia sql
             cursor.execute(sql, [self.nombre_entidad, self.num_operacion, rutaImagen])
