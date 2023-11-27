@@ -47,8 +47,41 @@ def listar():
             return jsonify(resultado), 200
         else: 
             return jsonify(resultado), 500 #Reset Content
-        
 
+from flask import request
+
+@ws_cliente.route('/cliente', methods=['GET'])
+def filtrarclientes():
+    if request.method == 'GET':
+        obj = Cliente()
+
+        # Obtener el tipo de filtro y su valor desde los parámetros de la solicitud
+        tipo_filtro = request.args.get('tipo_filtro', None)
+        valor_filtro = request.args.get('valor_filtro', None)
+
+        # Validar que se proporcionen tanto el tipo como el valor del filtro
+        if tipo_filtro is None or valor_filtro is None:
+            return jsonify({'error': 'Se deben proporcionar el tipo y valor del filtro'}), 400
+
+        # Realizar el listado según el tipo de filtro
+        if tipo_filtro == 'DNI':
+            resultadoJSON = obj.listadoClientesDNI(valor_filtro)
+        elif tipo_filtro == 'RUC':
+            resultadoJSON = obj.listadoClientesRUC(valor_filtro)
+        elif tipo_filtro == 'nombres':
+            resultadoJSON = obj.listadoClientesNombre(valor_filtro)
+        elif tipo_filtro == 'estado':
+            resultadoJSON = obj.listadoClientesEstado(valor_filtro)
+        else:
+            return jsonify({'error': 'Tipo de filtro no válido'}), 400
+
+        resultado = json.loads(resultadoJSON)
+
+        if resultado['status'] == True:
+            return jsonify(resultado), 200
+        else:
+            return jsonify(resultado), 500  # Reset Content
+        
 @ws_cliente.route('/cliente/estado', methods = ["POST"])
 #@vt.validar
 def registrarPago():
