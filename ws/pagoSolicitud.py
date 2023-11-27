@@ -51,3 +51,19 @@ def validarPago():
             return jsonify(resultado), 200
         else: 
             return jsonify(resultado), 500 #Reset Content
+        
+@ws_pagoSolicitud.route('/pagosolicitud/<int:id>', methods = ["GET"])
+#@vt.validar
+def listar(id):
+
+    if request.method == 'GET':
+        obj = PagoSolicitud()
+    
+        resultadoJSON = obj.estadoPago(id)
+
+        resultado = json.loads(resultadoJSON)
+
+        if resultado['status'] == True: 
+            return jsonify(resultado), 200
+        else: 
+            return jsonify(resultado), 500 #Reset Content

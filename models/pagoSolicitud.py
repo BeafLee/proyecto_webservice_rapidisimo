@@ -67,7 +67,7 @@ class PagoSolicitud:
             cursor.close()
             con.close()
 
-    def estadoPago(self):
+    def estadoPago(self, solicitud_id):
         con = db().open
 
         cursor = con.cursor()
@@ -77,10 +77,10 @@ class PagoSolicitud:
             FROM PAGO_SOLICITUD P
             INNER JOIN SOLICITUD_SERVICIO S ON P.id = S.PAGO_SOLICITUDid
             INNER JOIN ESTADO_SOLICITUD E ON S.id = E.SOLICITUD_SERVICIOid
-            WHERE E.nombreEstado = 'RECHAZADO' OR E.nombreEstado = 'CONFIRMADO'
+            WHERE E.nombreEstado = 'RECHAZADO' OR E.nombreEstado = 'CONFIRMADO' AND E.SOLICITUD_SERVICIOid = %s
             """
         
-        cursor.execute(sql)
+        cursor.execute(sql, [solicitud_id])
 
         datos = cursor.fetchall()
 
@@ -88,7 +88,7 @@ class PagoSolicitud:
         con.close()
 
         if datos:
-            return json.dumps({'status': True, 'data': datos, 'message': 'Lista de los conductores'})
+            return json.dumps({'status': True, 'data': datos, 'message': 'Estado del pago'})
         else:
             return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})
 

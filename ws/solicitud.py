@@ -39,7 +39,7 @@ ws_solicitud = Blueprint('ws_solicitud', __name__)
 def insertar():
     if request.method == 'POST':
         # Verifica que los parámetros necesarios estén presentes en el formulario
-        if 'descripcionCarga' not in request.form or 'claseCarga' not in request.form or 'tipoCarga' not in request.form or 'categoriaCarga' not in request.form or 'pesoKg' not in request.form or 'fechaHoraPartida' not in request.form or 'fechaHoraLlegada' not in request.form or 'direccionOrigen' not in request.form or 'direccionDestino' not in request.form or 'montoPagar' not in request.form:
+        if 'descripcionCarga' not in request.form or 'claseCarga' not in request.form or 'tipoCarga' not in request.form or 'categoriaCarga' not in request.form or 'pesoKg' not in request.form or 'fechaHoraPartida' not in request.form or 'fechaHoraLlegada' not in request.form or 'direccionOrigen' not in request.form or 'direccionDestino' not in request.form:
             return jsonify({'status': False, 'data': None, 'message': 'Faltan parámetros'}), 400
 
         descripcionCarga = request.form['descripcionCarga']
@@ -51,16 +51,14 @@ def insertar():
         fechaHoraLlegada = request.form['fechaHoraLlegada']
         source = request.form['direccionOrigen']
         destination = request.form['direccionDestino']
-        montoPagar = request.form['montoPagar']
-        distanciaKm = request.form['fechaHoraPartida']
-        TARIFAid = request.form['fechaHoraLlegada']
-        CLIENTEid = request.form['direccionOrigen']
-        PAGO_SOLICITUDid = request.form['direccionDestino']
+        TARIFAid = request.form['TARIFAid']
+        CLIENTEid = request.form['CLIENTEid']
+        PAGO_SOLICITUDid = request.form['PAGO_SOLICITUDid']
 
         obj = Solicitud(
             None, descripcionCarga, claseCarga, tipoCarga, categoriaCarga, pesoKg,
             fechaHoraPartida, fechaHoraLlegada, source, destination,
-            montoPagar, None, TARIFAid, CLIENTEid, PAGO_SOLICITUDid 
+            None, None, TARIFAid, CLIENTEid, PAGO_SOLICITUDid 
         )
 
         # Llama al método registrarSolicitud

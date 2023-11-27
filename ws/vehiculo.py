@@ -4,7 +4,7 @@ import json
 import validarToken as vt
 
 ws_vehiculo = Blueprint('ws_vehiculo',__name__)
-@ws_vehiculo.route('/conductor/insertar', methods=['POST'])
+@ws_vehiculo.route('/vehiculo/insertar', methods=['POST'])
 @vt.validar
 def insertar():
     if request.method == 'POST':

@@ -179,7 +179,7 @@ class Solicitud():
 
         try:
             # Obtiene la distancia desde Google Maps
-            direction_result = self.gmaps_client.directions(source, destination, mode='driving', avoid='ferries', departure_time=now, transit_mode='bus')
+            direction_result = gmaps_client.directions(source, destination, mode='driving', avoid='ferries', departure_time=now, transit_mode='bus')
             distancia_km = direction_result[0]['legs'][0]['distance']['value'] / 1000.0
 
             # Consulta SQL con la distancia calculada
