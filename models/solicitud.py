@@ -2,6 +2,12 @@ from conexionBD import Conexion as db
 import json
 from models import cliente
 from util import CustomJsonEncoder
+import googlemaps
+from datetime import datetime
+
+gmaps_client = googlemaps.Client(key = 'AIzaSyAuvyHp8YI8zyYX7DClmyMP7U2KpLH3sKE')
+now = datetime.now()
+
 class Solicitud():
     def __init__(self,p_id=None,p_descripcionCarga=None,p_claseCarga=None,p_tipoCarga=None,p_categoriaCarga=None,
                  p_pesoKg=None,p_fechaHoraPartida=None,p_fechaHoraLlegada=None,p_direccionOrigen=None,
@@ -161,3 +167,73 @@ class Solicitud():
             return json.dumps({'status': True, 'data': solicitudes, 'message': 'Lista de solicitudes'}, cls=CustomJsonEncoder)
         else:
             return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})
+
+    def registrarSolicitud(self, origen, destino):
+        con = db().open
+        con.autocommit = False
+        cursor = con.cursor()
+
+        source = origen
+        destination = destino
+        now = datetime.now()
+
+        try:
+            # Obtiene la distancia desde Google Maps
+            direction_result = self.gmaps_client.directions(source, destination, mode='driving', avoid='ferries', departure_time=now, transit_mode='bus')
+            distancia_km = direction_result[0]['legs'][0]['distance']['value'] / 1000.0
+
+            # Consulta SQL con la distancia calculada
+            sql = """
+                INSERT INTO SOLICITUD_SERVICIO (
+                    descripcionCarga,
+                    claseCarga,
+                    tipoCarga,
+                    categoriaCarga,
+                    pesoKg,
+                    fechaHoraPartida,
+                    fechaHoraLlegada,
+                    direccionOrigen,
+                    direccionDestino,
+                    montoPagar,
+                    distanciaKm,
+                    TARIFAid,
+                    CLIENTEid,
+                    PAGO_SOLICITUDid
+                )
+                VALUES (
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    (
+                        SELECT ((SV.pesoKg/1000)*T.tarifa*%s) AS monto
+                        FROM tarifa T
+                        INNER JOIN solicitud_servicio SV ON T.id = SV.TARIFAid
+                        WHERE SV.id = %s
+                    ),
+                    %s,
+                    %s,
+                    %s,
+                    %s
+                );
+                """
+
+            cursor.execute(sql, [
+                self.descripcionCarga, self.claseCarga, self.tipoCarga, self.categoriaCarga,
+                self.pesoKg, self.fechaHoraPartida, self.fechaHoraLlegada, self.direccionOrigen,
+                self.direccionDestino, distancia_km, self.TARIFAid, self.CLIENTEid, self.PAGO_SOLICITUDid
+            ])
+            
+            con.commit()
+            return json.dumps({'status': True, 'data': None, 'message': 'Solicitud de servicio registrada correctamente'})
+        except con.Error as error:
+            con.rollback()
+            return json.dumps({'status': False, 'data': None, 'message': format(error)})
+        finally:
+            cursor.close()
+            con.close()
