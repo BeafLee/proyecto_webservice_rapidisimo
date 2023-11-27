@@ -91,3 +91,46 @@ class PagoSolicitud:
             return json.dumps({'status': True, 'data': datos, 'message': 'Lista de los conductores'})
         else:
             return json.dumps({'status': False, 'data': [], 'message': 'Sin registros'})
+
+    #API 14
+    def validarPago(self, solicitud_id, respuesta):
+        #Abrimos conexion a la bd
+        con = db().open
+    
+        #Configurar para que los cambios de escritura en la BD se confirmen de manera manual
+        con.autocommit = False
+
+        #Crear un cursor
+        cursor = con.cursor()
+
+        try:
+            if (respuesta == "aceptar"):
+                
+                #Actualizar el estadoPago de la solicitud
+                sql = "update SOLICITUD_SERVICIO set estadoPago = 'C' where id = %s"
+
+                #ejecutar la sentencia sql
+                cursor.execute(sql, [solicitud_id])
+
+            else:
+
+                #Eliminar la relación del pago rechazado
+                sql = "update SOLICITUD_SERVICIO set estadoPago = 'R' where id = %s"
+
+                #ejecutar la sentencia sql
+                cursor.execute(sql, [solicitud_id])
+
+            #Confirmar la sentencia de ejecución
+            con.commit()
+
+            #retornar un mensaje
+            return json.dumps({'status': True, 'data': None, 'message': 'Verificación registrado correctamente'})
+
+        except con.Error as error:
+            #Revocar la operación
+            con.rollback()
+            return json.dumps({'status': False, 'data': None, 'message': format(error)})
+
+        finally:
+            cursor.close()
+            con.close()

@@ -44,6 +44,7 @@ CREATE TABLE SOLICITUD_SERVICIO (
   direccionDestino varchar(255) NOT NULL, 
   montoPagar       numeric(9, 2) NOT NULL, 
   distanciaKm      numeric(9, 2) NOT NULL, 
+  estadoPago       char(1) NULL,
   TARIFAid         int(10) NOT NULL, 
   CLIENTEid        int(10) NOT NULL, 
   PAGO_SOLICITUDid int(10), 

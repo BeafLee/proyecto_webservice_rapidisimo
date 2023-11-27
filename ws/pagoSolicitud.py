@@ -28,3 +28,26 @@ def registrarPago():
             return jsonify(resultado), 200
         else: 
             return jsonify(resultado), 500 #Reset Content
+        
+
+@ws_pagoSolicitud.route('/pago/validar', methods = ["POST"])
+#@vt.validar
+def validarPago():
+
+    if request.method == 'POST':
+        if any(key not in request.form for key in ['solicitud_id', 'respuesta']):
+            return jsonify({'status': False, 'data': None, 'message': 'Falta parámetros'}), 400
+        
+        solicitud_id = request.form['solicitud_id']
+        respuesta = request.form['respuesta']
+
+        obj = PagoSolicitud()
+    
+        resultadoJSON = obj.validarPago(solicitud_id, respuesta)
+
+        resultado = json.loads(resultadoJSON)
+
+        if resultado['status'] == True: 
+            return jsonify(resultado), 200
+        else: 
+            return jsonify(resultado), 500 #Reset Content
