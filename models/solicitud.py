@@ -269,7 +269,7 @@ class Solicitud():
         cursor = con.cursor()
 
         sql =   """
-                    select *
+                    select S.*, C.tipoDoc, C.numeroDoc, C.nombres, C.razonSocial, C.direccion, C.email, C.telefono, C.estado
                     from SOLICITUD_SERVICIO S
                         inner join CLIENTE C on C.id = S.CLIENTEid           
                     where id = %s
