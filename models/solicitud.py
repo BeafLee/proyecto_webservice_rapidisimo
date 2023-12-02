@@ -269,18 +269,32 @@ class Solicitud():
         cursor = con.cursor()
 
         sql =   """
-                    select S.*, C.tipoDoc, C.numeroDoc, C.nombres, C.razonSocial, C.direccion, C.email, C.telefono, C.estado
-                    from SOLICITUD_SERVICIO S
-                        inner join CLIENTE C on C.id = S.CLIENTEid           
-                    where S.id = %s
+                    select *
+                    from SOLICITUD_SERVICIO           
+                    where id = %s
                 """
 
 
         #Ejecutar la sentencia
         cursor.execute(sql, [self.id])
-        
+             
         #Recuperar los datos y almacenarlos en la variable "datos"
         solicitud = cursor.fetchone()
+
+        sql =   """
+                    select *
+                    from CLIENTE  
+                    where id = %s
+                """
+
+
+        #Ejecutar la sentencia
+        cursor.execute(sql, [solicitud['CLIENTEid']])
+
+        #Recuperar los datos y almacenarlos en la variable "datos"
+        cliente = cursor.fetchone()
+
+        solicitud['cliente'] = cliente
 
         sql = """
             SELECT vc.*, v.matricula, CONCAT(c.apellidos, ', ', c.nombres) as conductor 
