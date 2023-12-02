@@ -270,7 +270,8 @@ class Solicitud():
 
         sql =   """
                     select *
-                    from SOLICITUD_SERVICIO             
+                    from SOLICITUD_SERVICIO S
+                        inner join CLIENTE C on C.id = S.CLIENTEid           
                     where id = %s
                 """
 
