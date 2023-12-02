@@ -33,7 +33,7 @@ class Solicitud():
 
         #Crear un cursor
         cursor = con.cursor()
-        if id == 0:
+        if id == '0':
             sql =   """
                         select 
                             *
@@ -60,7 +60,8 @@ class Solicitud():
                         S.distanciaKm,
                         T.tarifa,
                         concat(P.nombreEntidad, ' - ', P.numOperacion) as pago,
-                        VC.nombreEstado
+                        VC.nombreEstado,
+                        C.*
                     from 
                         SOLICITUD_SERVICIO S
                     inner join

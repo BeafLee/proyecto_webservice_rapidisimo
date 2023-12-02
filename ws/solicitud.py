@@ -6,10 +6,16 @@ import jwt
 import datetime
 import validarToken as vt
 ws_solicitud = Blueprint('ws_solicitud',__name__)
-@ws_solicitud.route('/solicitud/listar/<int:id>', methods=['GET'])
+@ws_solicitud.route('/solicitud/listar', methods=['POST'])
 #@vt.validar
-def listarSolicitud(id):
-    if request.method == 'GET':
+def listarSolicitud():
+    if request.method == 'POST':
+
+        if 'solicitud_id' not in request.form:
+            return jsonify({'status': False, 'data': None, 'message': 'Faltan parámetros'}), 400
+        
+        id = request.form['solicitud_id']
+
         #Instanciar a la clase Cliente
         obj = Solicitud()
         #Ejecutar al método eliminar()
